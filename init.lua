@@ -48,3 +48,42 @@ vim.keymap.set('n', '<Leader>k', ":wincmd k<CR>",
 
 vim.keymap.set('n', '<Leader>l', ":wincmd l<CR>",
   { silent = true, desc = "Navigate splits: move right" })
+
+-- PLUGIN SUPPORT
+
+-- install lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  print("Installing lazy.nvim...")
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+  print("Lazy.nvim installed!")
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- install plugins
+return require("lazy").setup({
+  -- Treesitter for syntax parsing
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    priority = 100,
+  },
+  
+  -- Language Server Protocol support
+  {
+    "dundalek/lazy-lsp.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+    },
+    config = function()
+      require("lazy-lsp").setup {}
+    end
+  },
+})
