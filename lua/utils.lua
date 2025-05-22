@@ -53,4 +53,30 @@ M.sudo_write_quit = function(tmpfile, filepath)
   end
 end
 
+-- from https://smarttech101.com/nvim-lsp-diagnostics-keybindings-signs-virtual-texts
+M.print_diagnostics = function(opts, buf, line, client_id)
+  buf = buf or 0
+  line = line or (vim.api.nvim_win_get_cursor(0)[1] - 1)
+  opts = opts or {['lnum'] = line}
+
+  local severity_info = {
+    [vim.diagnostic.severity.ERROR] = {"DiagnosticError", "E"},
+    [vim.diagnostic.severity.WARN] = {"DiagnosticWarn", "W"},
+    [vim.diagnostic.severity.INFO] = {"DiagnosticInfo", "I"},
+    [vim.diagnostic.severity.HINT] = {"DiagnosticHint", "H"}
+  }
+  
+  local line_diagnostics = vim.diagnostic.get(buf, opts)
+  if vim.tbl_isempty(line_diagnostics) then return end
+
+  local diagnostic_messages = {}
+  for _, diagnostic in ipairs(line_diagnostics) do
+    local msg = string.format("[%s] %s\n", 
+                                severity_info[diagnostic.severity][2], 
+                                diagnostic.message or "")
+    table.insert(diagnostic_messages, {msg, severity_info[diagnostic.severity][1]})
+  end
+  vim.api.nvim_echo(diagnostic_messages, false, {})
+end
+
 return M

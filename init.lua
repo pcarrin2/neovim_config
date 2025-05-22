@@ -11,6 +11,7 @@ vim.o.wrap = false
 vim.o.foldmethod = "syntax"
 vim.o.splitright = true
 vim.o.splitbelow = true
+vim.o.updatetime = 1000
 vim.cmd('syntax enable')
 vim.cmd('filetype plugin indent on')
 
@@ -48,6 +49,15 @@ vim.keymap.set('n', '<Leader>k', ":wincmd k<CR>",
 
 vim.keymap.set('n', '<Leader>l', ":wincmd l<CR>",
   { silent = true, desc = "Navigate splits: move right" })
+
+-- DIAGNOSTICS BEHAVIOR
+
+-- show current line's diagnostics in message area
+-- vim.cmd [[ autocmd! CursorHold * lua require'utils'.print_diagnostics() ]]
+
+vim.api.nvim_create_autocmd({ "CursorHold" }, 
+                            { pattern = "*",
+                              callback = function() utils.print_diagnostics() end })
 
 -- PLUGIN SUPPORT
 
