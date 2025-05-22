@@ -71,9 +71,10 @@ M.print_diagnostics = function(opts, buf, line, client_id)
 
   local diagnostic_messages = {}
   for _, diagnostic in ipairs(line_diagnostics) do
-    local msg = string.format("[%s] %s\n", 
-                                severity_info[diagnostic.severity][2], 
-                                diagnostic.message or "")
+    local msg = string.format("%s\n(source: %s)\n", 
+                                diagnostic.message or "(no message)",
+                                diagnostic.source or "unknown"
+                              )
     table.insert(diagnostic_messages, {msg, severity_info[diagnostic.severity][1]})
   end
   vim.api.nvim_echo(diagnostic_messages, false, {})

@@ -93,7 +93,12 @@ return require("lazy").setup({
       "neovim/nvim-lspconfig",
     },
     config = function()
-      require("lazy-lsp").setup {}
+      require("lazy-lsp").setup {
+        excluded_servers = {
+          "pylyzer", -- false-positive errors regarding imports, overzealous type-checking
+          "pyright" -- subset of basedpyright's capabilities
+        }
+      }
     end
   },
 })
