@@ -9,6 +9,7 @@ vim.o.expandtab = true
 vim.o.smartindent =  true
 vim.o.wrap = false
 vim.o.foldmethod = "syntax"
+vim.o.foldlevel = 999
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.updatetime = 1000
